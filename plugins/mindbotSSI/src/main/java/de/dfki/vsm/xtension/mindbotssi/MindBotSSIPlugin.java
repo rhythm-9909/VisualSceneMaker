@@ -1,6 +1,8 @@
 package de.dfki.vsm.xtension.mindbotssi;
 
 import de.dfki.vsm.model.project.PluginConfig;
+import de.dfki.vsm.runtime.activity.AbstractActivity;
+import de.dfki.vsm.runtime.activity.executor.ActivityExecutor;
 import de.dfki.vsm.runtime.project.RunTimeProject;
 import de.dfki.vsm.xtension.ssi.SSIRunTimePlugin;
 import de.dfki.vsm.xtension.ssi.event.SSIEventArray;
@@ -20,6 +22,29 @@ public final class MindBotSSIPlugin extends SSIRunTimePlugin {
 
     }
 
+    public void sendStart() {
+
+
+        mSender.sendBytes(
+                // 0000"enable using wireshark"
+              new byte[] {0X05,0X00,0X00,0X00}
+
+
+        );
+
+       mLogger.message("message sent");
+
+    }
+
+    void sendStop() {
+        mSender.sendBytes(
+                // 0000"disable using wireshark"
+                new byte[]{ 0X02,0X00,0X00,0X00}
+
+
+                //new byte[]{02,00,00,00}
+        );
+    }
     // Launch SSI plugin
     @Override
     public void launch() {
@@ -64,7 +89,7 @@ public final class MindBotSSIPlugin extends SSIRunTimePlugin {
                 assert last_coords_str.length == 2 ;
                 float x = Float.parseFloat(last_coords_str[0]) ;
                 float y = Float.parseFloat(last_coords_str[1]) ;
-                mLogger.message("Most recent Mouse coords: \t" + x + "\t" + y);
+              mLogger.message("Most recent Mouse coords: \t" + x + "\t" + y);
 
                 mProject.setVariable("ssi_mouse_x", x);
                 mProject.setVariable("ssi_mouse_y", y);
